@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.vp.detail.DetailActivity;
 import com.vp.list.viewmodel.SearchResult;
 import com.vp.list.viewmodel.ListViewModel;
 
@@ -164,6 +165,10 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
 
     @Override
     public void onItemClick(String imdbID) {
-        //TODO handle click events
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        Uri.Builder builder = new Uri.Builder();
+        builder.appendQueryParameter("imdbID", imdbID);
+        intent.setData(builder.build());
+        startActivity(intent);
     }
 }
