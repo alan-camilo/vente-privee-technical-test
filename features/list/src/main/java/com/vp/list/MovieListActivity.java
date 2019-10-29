@@ -1,13 +1,14 @@
 package com.vp.list;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.SearchView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
     private SearchView searchView;
     private boolean searchViewExpanded = true;
     private CharSequence searchQuery = null;
+    private ListFragment listFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +35,13 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
         setContentView(R.layout.activity_movie_list);
 
         if (savedInstanceState == null) {
+            listFragment = new ListFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainer, new ListFragment(), ListFragment.TAG)
+                    .replace(R.id.fragmentContainer, listFragment, ListFragment.TAG)
                     .commit();
         } else {
+            listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(ListFragment.TAG);
             searchViewExpanded = savedInstanceState.getBoolean(IS_SEARCH_VIEW_ICONIFIED);
             searchQuery = savedInstanceState.getCharSequence(SEARCH_QUERY);
         }
@@ -80,5 +84,16 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingActivityInjector;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_refresh) {
+            listFragment.onActivityInteraction();
+            return true;
+        }
+
+        // User didn't trigger a refresh, let the superclass handle this action
+        return super.onOptionsItemSelected(item);
     }
 }
