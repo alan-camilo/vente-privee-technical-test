@@ -19,10 +19,8 @@ android {
     }
     buildTypes {
         debug {
-            //to use proguard, uncomment these two lines
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //minifyEnabled true
-            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
         }
         debugProguard {
             initWith buildTypes.debug
